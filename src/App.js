@@ -1,25 +1,47 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useMemo } from 'react';
+import styled from 'styled-components';
+import Card from './components/Card';
+import doubleNumbers from './utils/doubleNumbers';
 
-function App() {
+const Container = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  grid-column-gap: 16px;
+  margin-top: 50px;
+`;
+
+const App = () => {
+  const [inputValue, setInputValue] = useState('');
+
+  const outputValue = useMemo(() => {
+    if (inputValue.length <= 0) {
+      return '';
+    }
+    return doubleNumbers(inputValue.split(','));
+  }, [inputValue]);
+
+  const handleSetInputValue = (value) => {
+    setInputValue(value);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container>
+      <Card
+        title="Input"
+        subtitle="Array"
+        value={inputValue}
+        onHandleChange={handleSetInputValue}
+        data-testid="input-card"
+      />
+      <Card
+        title="Output"
+        subtitle="Double"
+        value={outputValue}
+        isReadOnly
+        data-testid="output-card"
+      />
+    </Container>
   );
-}
+};
 
 export default App;
